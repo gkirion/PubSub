@@ -17,18 +17,21 @@ public class Broker implements Brokerable {
         executorService = Executors.newFixedThreadPool(8);
     }
 
+    public synchronized void publish(final Message message) {
+        if (subscribers.containsKey(message.getTopic())) {
+            for (final Receivable receivable : subscribers.get(message.getTopic())) {
+                executorService.submit(new Runnable() {
+                    public void run() {
+                        receivable.receive(message);
+                    }
+                });
+            }
+        }
+    }
+
     public synchronized void publish(String topic, String text) {
         final Message message = new Message(topic, text);
-        if (!subscribers.containsKey(topic)) {
-            subscribers.put(topic, new LinkedList<Receivable>());
-        }
-        for (final Receivable receivable : subscribers.get(topic)) {
-            executorService.submit(new Runnable() {
-                public void run() {
-                    receivable.receive(message);
-                }
-            });
-        }
+        publish(message);
     }
 
     public synchronized boolean subscribe(String topic, Receivable receivable) {
