@@ -1,30 +1,26 @@
 package pubsub.broker;
 
-import org.graalvm.compiler.asm.sparc.SPARCAssembler;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Broker implements Brokerable {
 
-    private Map<String, Queue<Receivable>> subscribers;
+    private Map<String, Set<Receivable>> subscribers;
     private ExecutorService executorService;
 
     public Broker() {
-        subscribers = new HashMap<String, Queue<Receivable>>();
+        subscribers = new HashMap<>();
         executorService = Executors.newFixedThreadPool(8);
     }
 
     public synchronized void publish(final Message message) {
         if (subscribers.containsKey(message.getTopic())) {
             for (final Receivable receivable : subscribers.get(message.getTopic())) {
-                executorService.submit(new Runnable() {
-                    public void run() {
-                        receivable.receive(message);
-                    }
-                });
+                executorService.submit(() -> receivable.receive(message));
             }
         }
     }
@@ -36,9 +32,9 @@ public class Broker implements Brokerable {
 
     public synchronized boolean subscribe(String topic, Receivable receivable) {
         if (!subscribers.containsKey(topic)) {
-            subscribers.put(topic, new LinkedList<Receivable>());
+            subscribers.put(topic, new HashSet<>());
         }
-        return subscribers.get(topic).offer(receivable);
+        return subscribers.get(topic).add(receivable);
     }
 
     public synchronized void unsubscribe(String topic, Receivable receivable) {
