@@ -13,8 +13,12 @@ public class Broker implements Brokerable {
     private ExecutorService executorService;
 
     public Broker() {
+        this(8);
+    }
+
+    public Broker(int nThreads) {
         subscribers = new HashMap<>();
-        executorService = Executors.newFixedThreadPool(8);
+        executorService = Executors.newFixedThreadPool(nThreads);
     }
 
     public synchronized void publish(final Message message) {
