@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 
 public class Broker implements Brokerable {
 
-    private Map<String, Set<Receivable>> subscribers;
+    protected Map<String, Set<Receivable>> subscribers;
     private ExecutorService executorService;
 
     public Broker() {
@@ -21,7 +21,7 @@ public class Broker implements Brokerable {
         executorService = Executors.newFixedThreadPool(nThreads);
     }
 
-    public synchronized void publish(final Message message) {
+    public void publish(final Message message) {
         if (subscribers.containsKey(message.getTopic())) {
             for (final Receivable receivable : subscribers.get(message.getTopic())) {
                 executorService.submit(() -> receivable.receive(message));
@@ -29,19 +29,19 @@ public class Broker implements Brokerable {
         }
     }
 
-    public synchronized void publish(String topic, String text) {
+    public void publish(String topic, String text) {
         final Message message = new Message(topic, text);
         publish(message);
     }
 
-    public synchronized boolean subscribe(String topic, Receivable receivable) {
+    public boolean subscribe(String topic, Receivable receivable) {
         if (!subscribers.containsKey(topic)) {
             subscribers.put(topic, new HashSet<>());
         }
         return subscribers.get(topic).add(receivable);
     }
 
-    public synchronized void unsubscribe(String topic, Receivable receivable) {
+    public void unsubscribe(String topic, Receivable receivable) {
         if (subscribers.containsKey(topic)) {
             subscribers.get(topic).remove(receivable);
         }
