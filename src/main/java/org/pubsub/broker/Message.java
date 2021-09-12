@@ -1,4 +1,4 @@
-package pubsub.broker;
+package org.pubsub.broker;
 
 import java.util.Date;
 
