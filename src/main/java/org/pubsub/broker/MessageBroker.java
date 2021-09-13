@@ -25,16 +25,17 @@ public class MessageBroker {
         executorService = Executors.newFixedThreadPool(nThreads);
     }
 
-    public void publish(final Message message) {
+    public void publish(final Message message) throws TopicNotExistsException {
         String topic = message.getTopic();
-        if (subscribers.containsKey(topic)) {
-            for (final Subscriber subscriber : subscribers.get(topic)) {
-                executorService.submit(() -> subscriber.receive(message));
-            }
+        if (!subscribers.containsKey(topic)) {
+            throw new TopicNotExistsException("Topic " + topic + " does not exist");
+        }
+        for (final Subscriber subscriber : subscribers.get(topic)) {
+            executorService.submit(() -> subscriber.receive(message));
         }
     }
 
-    public void publish(String topic, String text) {
+    public void publish(String topic, String text) throws TopicNotExistsException {
         final Message message = new Message(topic, text);
         publish(message);
     }

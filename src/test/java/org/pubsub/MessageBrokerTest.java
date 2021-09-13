@@ -13,6 +13,13 @@ import org.pubsub.exception.TopicNotExistsException;
 public class MessageBrokerTest {
 
     @Test
+    @DisplayName("publishTopicNotExistsTest")
+    public void publishTopicNotExistsTest() {
+        MessageBroker messageBroker = new MessageBroker();
+        Assertions.assertThrows(TopicNotExistsException.class, () -> messageBroker.publish("computers", ""));
+    }
+
+    @Test
     @DisplayName("subscriberAlreadyExistsTest")
     public void subscriberAlreadyExistsTest() throws AlreadySubscribedException {
         MessageBroker messageBroker = new MessageBroker();

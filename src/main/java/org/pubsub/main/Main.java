@@ -4,10 +4,11 @@ import org.pubsub.broker.Message;
 import org.pubsub.broker.MessageBroker;
 import org.pubsub.broker.Subscriber;
 import org.pubsub.exception.AlreadySubscribedException;
+import org.pubsub.exception.TopicNotExistsException;
 
 public class Main {
 
-    public static void main(String[] args) throws AlreadySubscribedException {
+    public static void main(String[] args) throws AlreadySubscribedException, TopicNotExistsException {
         MessageBroker messageBroker = new MessageBroker();
         messageBroker.subscribe("computers", new Subscriber() {
             public void receive(Message message) {
