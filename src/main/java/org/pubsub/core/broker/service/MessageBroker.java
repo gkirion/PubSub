@@ -1,8 +1,10 @@
-package org.pubsub.broker;
+package org.pubsub.core.broker.service;
 
-import org.pubsub.exception.AlreadySubscribedException;
-import org.pubsub.exception.SubscriberNotExistsException;
-import org.pubsub.exception.TopicNotExistsException;
+import org.pubsub.core.broker.exception.TopicNotExistsException;
+import org.pubsub.core.message.Message;
+import org.pubsub.core.subscriber.Subscriber;
+import org.pubsub.core.broker.exception.AlreadySubscribedException;
+import org.pubsub.core.broker.exception.SubscriberNotExistsException;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -1,14 +1,10 @@
-package org.pubsub.broker;
+package org.pubsub.core.broker.service;
 
 public class MessageBrokerBuilder {
 
     private int nThreads;
 
-    private MessageBrokerBuilder() {}
-
-    public MessageBrokerBuilder newBroker() {
-        return new MessageBrokerBuilder();
-    }
+    public MessageBrokerBuilder() {}
 
     public MessageBrokerBuilder nThreads(int nThreads) {
         this.nThreads = nThreads;

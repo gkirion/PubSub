@@ -1,4 +1,4 @@
-package org.pubsub.broker;
+package org.pubsub.core.message;
 
 public class MessageBuilder {
 

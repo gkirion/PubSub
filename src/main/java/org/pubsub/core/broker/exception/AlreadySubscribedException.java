@@ -1,4 +1,4 @@
-package org.pubsub.exception;
+package org.pubsub.core.broker.exception;
 
 public class AlreadySubscribedException extends Exception {
 
